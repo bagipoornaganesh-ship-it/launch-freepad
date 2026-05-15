@@ -1,0 +1,9 @@
+{
+  "name": "First 7 Days Freelance Launchpad",
+  "description": "A high-velocity operational launchpad for video editors to land their first freelance client in 7 days. Featuring niche-targeted outreach, portfolio ops, and adaptive pricing protocols.",
+  "requestFramePermissions": [
+    "clipboard-read",
+    "clipboard-write"
+  ],
+  "majorCapabilities": []
+}

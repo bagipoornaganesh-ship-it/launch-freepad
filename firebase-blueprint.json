@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "Client": {
+      "title": "Client/Lead",
+      "description": "Represents a potential or secured client lead.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "niche": { "type": "string" },
+        "status": { "type": "string", "enum": ["Cold", "Contacted", "Replied", "Closed"] },
+        "contactInfo": { "type": "string" },
+        "leadSource": { "type": "string" },
+        "dateContacted": { "type": "string" },
+        "followUpDate": { "type": "string" },
+        "notes": { "type": "string" },
+        "paymentReceived": { "type": "boolean" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "status", "userId"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial record of income or expense.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["income", "expense"] },
+        "name": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string" },
+        "method": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "name", "amount", "date", "userId"]
+    },
+    "RoadmapDay": {
+      "title": "Roadmap Day",
+      "description": "Progress tracking for a specific day in the 7-day roadmap.",
+      "type": "object",
+      "properties": {
+        "day": { "type": "number" },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "completed": { "type": "boolean" }
+            }
+          }
+        },
+        "userId": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["day", "tasks", "userId"]
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile document.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "niche": { "type": "string" },
+        "portfolioLinks": { "type": "array", "items": { "type": "string" } },
+        "portfolioChecklist": { 
+          "type": "array", 
+          "items": { 
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "completed": { "type": "boolean" }
+            }
+          }
+        },
+        "intlRateCard": { "type": "array", "items": { "$ref": "RatePackage" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid"]
+    },
+    "RatePackage": {
+      "title": "Rate Package",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "string" },
+        "deliverables": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profile data."
+    },
+    "users/{userId}/clients/{clientId}": {
+      "schema": "Client",
+      "description": "User's client leads."
+    },
+    "users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "User's financial transactions."
+    },
+    "users/{userId}/roadmap/{dayId}": {
+      "schema": "RoadmapDay",
+      "description": "User's progress on the 7-day roadmap."
+    }
+  }
+}
