@@ -86,7 +86,6 @@ import {
   OutreachChallenge, 
   ProjectTemplate,
   UserProfile,
-  RatePackage,
   FollowUpStep,
   Objection
 } from './types';
@@ -1177,99 +1176,35 @@ const ClientFind = () => {
   );
 };
 
-const RateCardManager = ({ profile, updateProfile }: { profile: UserProfile | null, updateProfile: (u: Partial<UserProfile>) => Promise<void> }) => {
-  const [localRateCard, setLocalRateCard] = useState<RatePackage[]>(profile?.intlRateCard || []);
-  const [isSaved, setIsSaved] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    if (profile?.intlRateCard) {
-      setLocalRateCard(profile.intlRateCard);
-    }
-  }, [profile?.intlRateCard]);
-
-  if (!profile) return null;
-
-  const updateCard = (packageId: string, field: keyof RatePackage, value: string) => {
-    setLocalRateCard(prev => prev.map(p => p.id === packageId ? { ...p, [field]: value } : p));
-  };
-
-  const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      await updateProfile({ intlRateCard: localRateCard });
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 2000);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+const RateCardManager = () => {
+  const PACKAGES = [
+    { name: 'Free Trial', price: '$0', desc: '1 Reel edit — sample work' },
+    { name: 'Starter', price: '$25', desc: '3 Reels' },
+    { name: 'Basic', price: '$75', desc: '8 Reels per month' },
+    { name: 'Standard', price: '$149', desc: '15 Reels + 1 Long-form per month' },
+  ];
 
   return (
     <div className="space-y-16 pb-24">
-      <SectionHeading 
-        title="Rate Card" 
-        subtitle="Standardized pricing architectures for your video editing services. Don't negotiate—dictate."
+      <SectionHeading
+        title="Rate Card"
+        subtitle="Your standardized pricing. Share this with every prospect. Don't negotiate—dictate."
         icon={DollarSign}
       />
       <div className="max-w-3xl">
         <Card className="p-10 border-white/5 bg-zinc-950/50">
-          <div className="flex items-center justify-between mb-10">
-            <h3 className="text-xl font-black text-white uppercase italic tracking-tighter flex items-center gap-3">
-              <Globe2 className="w-5 h-5 text-emerald-500" />
-              Service Packages
-            </h3>
-            <div className="flex items-center gap-6">
-              <button
-                onClick={handleSave}
-                disabled={isSaving}
-                className={cn(
-                  "px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg flex items-center gap-2",
-                  isSaved ? "bg-emerald-500 text-black" : "bg-zinc-800 text-white hover:bg-emerald-500 hover:text-black"
-                )}
-              >
-                {isSaving ? <div className="w-3 h-3 rounded-full border-2 border-zinc-500 border-t-white animate-spin" /> : isSaved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-                {isSaving ? "Saving..." : isSaved ? "Saved!" : "Save Rate Card"}
-              </button>
-              <span className="text-[10px] font-black text-zinc-700 uppercase tracking-widest font-mono italic">Sector_INTL</span>
-            </div>
-          </div>
-          
+          <h3 className="text-xl font-black text-white uppercase italic tracking-tighter flex items-center gap-3 mb-8">
+            <Globe2 className="w-5 h-5 text-emerald-500" />
+            Service Packages
+          </h3>
           <div className="space-y-6">
-            {localRateCard.map((pkg) => (
-              <div key={pkg.id} className="p-6 bg-zinc-900/50 rounded-2xl border border-white/5 space-y-4 group hover:border-emerald-500/20 transition-all">
-                <div className="flex justify-between items-start">
-                   <div className="flex-1 mr-4">
-                      <input 
-                        type="text"
-                        value={pkg.name}
-                        onChange={(e) => updateCard(pkg.id, 'name', e.target.value)}
-                        className="w-full bg-transparent text-white font-black uppercase text-sm focus:outline-none focus:text-emerald-400 p-1 rounded hover:bg-white/5"
-                      />
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-emerald-500 font-mono text-xs font-bold leading-none">$</span>
-                        <input 
-                          type="text"
-                          value={pkg.price}
-                          onChange={(e) => updateCard(pkg.id, 'price', e.target.value)}
-                          className="bg-transparent text-zinc-400 font-mono text-xs focus:outline-none focus:text-white p-1 rounded hover:bg-white/5 w-24"
-                        />
-                      </div>
-                   </div>
+            {PACKAGES.map((pkg) => (
+              <div key={pkg.name} className="p-6 bg-zinc-900/50 rounded-2xl border border-white/5 flex justify-between items-center hover:border-emerald-500/20 transition-all">
+                <div>
+                  <p className="text-white font-black uppercase text-sm">{pkg.name}</p>
+                  <p className="text-zinc-500 text-xs mt-1">{pkg.desc}</p>
                 </div>
-                
-                <div className="space-y-2">
-                   <p className="text-[9px] font-black text-zinc-700 uppercase tracking-widest italic">Deliverables_Manifest</p>
-                   <div className="flex flex-wrap gap-2">
-                      {pkg.deliverables.map((d, i) => (
-                        <span key={i} className="px-3 py-1 bg-black rounded-lg text-[9px] font-bold text-zinc-500 border border-white/5 uppercase tracking-tight italic">
-                          {d}
-                        </span>
-                      ))}
-                   </div>
-                </div>
+                <span className="text-emerald-500 font-black text-xl">{pkg.price}</span>
               </div>
             ))}
           </div>
@@ -1340,11 +1275,11 @@ const ClosingTools = ({ profile }: { profile: UserProfile | null }) => {
                    <p><span className="text-zinc-600">CLIENT:</span> [Prospect Name]</p>
                    <p><span className="text-zinc-600">DELIVERABLES:</span> 15x Reels + 1 Long-form Edit</p>
                    <p><span className="text-zinc-600">TIMELINE:</span> First draft in 48 hours.</p>
-                   <p><span className="text-zinc-600">INVESTMENT:</span> ${profile.intlRateCard?.[3]?.price || '149'} USD (50% Upfront)</p>
+                   <p><span className="text-zinc-600">INVESTMENT:</span> $149 USD (50% Upfront)</p>
                    <p className="text-[10px] text-zinc-800 mt-10">--- GENERATED_BY_LAUNCHPAD_v1.0 ---</p>
                 </div>
                 <button 
-                  onClick={() => copyToClipboard(`PROJECT BATTLE-PLAN:\nCLIENT: [Name]\nDELIVERABLES: 15x Reels + 1 Long-form Edit\nTIMELINE: First draft in 48 hours.\nINVESTMENT: $${profile.intlRateCard?.[3]?.price || '149'} USD\n\nNext steps: Confirm scope and I'll send the onboarding link.`)}
+                  onClick={() => copyToClipboard(`PROJECT BATTLE-PLAN:\nCLIENT: [Name]\nDELIVERABLES: 15x Reels + 1 Long-form Edit\nTIMELINE: First draft in 48 hours.\nINVESTMENT: $149 USD\n\nNext steps: Confirm scope and I'll send the onboarding link.`)}
                   className="w-full py-4 bg-white text-black hover:bg-emerald-500 transition-all rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-black/40"
                 >
                   <Copy className="w-4 h-4" /> Copy Scope Template
@@ -2386,7 +2321,7 @@ export default function App() {
       case 'roadmap': return <Roadmap roadmapState={roadmapState} toggleTask={toggleTask} />;
       case 'week2': return <Week2Protocol week2State={week2State} toggleTask={toggleWeek2Task} clients={clients} />;
       case 'portfolio': return <PortfolioManager profile={profile} updateProfile={updateProfile} />;
-      case 'pricing': return <RateCardManager profile={profile} updateProfile={updateProfile} />;
+      case 'pricing': return <RateCardManager />;
       case 'templates': return <ProjectTemplates />;
       case 'dms': return <DMLibrary profile={profile} />;
       case 'clients': return <ClientTracker clients={clients} addClient={addClient} updateClient={updateClientDoc} deleteClient={removeClient} />;
