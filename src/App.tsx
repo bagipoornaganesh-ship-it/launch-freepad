@@ -86,6 +86,7 @@ import {
   OutreachChallenge, 
   ProjectTemplate,
   UserProfile,
+  RatePackage,
   FollowUpStep,
   Objection
 } from './types';
@@ -126,18 +127,18 @@ const Login = () => {
           <div className="w-8 h-8 flex items-center justify-center bg-zinc-900 rounded-lg group-hover:bg-emerald-500 transition-colors">
             <Target className="w-4 h-4 text-white group-hover:text-black" />
           </div>
-          Initiate Credentials Sync
+          Sign In with Google
         </button>
 
         <div className="pt-12 flex items-center justify-center gap-6">
           <div className="text-center">
             <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-1 italic">Status</p>
-            <p className="text-xs font-mono font-bold text-red-500/50 uppercase">Offline</p>
+            <p className="text-xs font-mono font-bold text-red-500/50 uppercase">Ready</p>
           </div>
           <div className="w-px h-10 bg-white/5" />
           <div className="text-center">
-            <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-1 italic">Encryption</p>
-            <p className="text-xs font-mono font-bold text-zinc-500 uppercase">AES-256-SYNC</p>
+            <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-1 italic">Security</p>
+            <p className="text-xs font-mono font-bold text-zinc-500 uppercase">Secure Login</p>
           </div>
         </div>
       </div>
@@ -195,13 +196,13 @@ const SectionHeading = ({ title, subtitle, icon: Icon }: { title: string, subtit
       </div>
       <div className="flex items-center gap-6 pb-2">
         <div className="text-right">
-          <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-1 italic">System Latency</p>
-          <p className="text-xs font-mono font-bold text-emerald-500/50 uppercase">12ms · Stable</p>
+          <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-1 italic">Version</p>
+          <p className="text-xs font-mono font-bold text-emerald-500/50 uppercase">v1.0</p>
         </div>
         <div className="w-px h-10 bg-white/5" />
         <div className="text-right">
-          <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-1 italic">Protocol V1.0</p>
-          <p className="text-xs font-mono font-bold text-zinc-500 uppercase">20-DM-SYNC</p>
+          <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-1 italic">System</p>
+          <p className="text-xs font-mono font-bold text-zinc-500 uppercase">7-Day System</p>
         </div>
       </div>
     </div>
@@ -258,7 +259,7 @@ const Dashboard = ({ roadmapState, clients, transactions, setActiveTab }: any) =
   return (
     <div className="space-y-12">
       <SectionHeading 
-        title="Command Center" 
+        title="Dashboard" 
         subtitle="Operational overview of your outreach engine. All systems nominal. Proceed to maximize output."
         icon={LayoutDashboard}
       />
@@ -277,7 +278,7 @@ const Dashboard = ({ roadmapState, clients, transactions, setActiveTab }: any) =
           </div>
           <div className="mt-12 relative">
             <div className="flex justify-between items-center mb-3">
-              <span className="text-[10px] font-black text-zinc-700 uppercase tracking-widest">Velocity Protocol</span>
+              <span className="text-[10px] font-black text-zinc-700 uppercase tracking-widest">Daily System</span>
               <span className="text-xs font-mono font-bold text-emerald-500">{Math.round((completedTasks/totalTasks)*100)}%</span>
             </div>
             <ProgressBar progress={(completedTasks/totalTasks)*100} color="bg-emerald-500" />
@@ -372,7 +373,7 @@ const Dashboard = ({ roadmapState, clients, transactions, setActiveTab }: any) =
               <div className="space-y-3">
                  <div className="flex items-center gap-3">
                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.5)] animate-pulse"></div>
-                   <p className="text-xs font-black text-zinc-300 uppercase tracking-widest italic">Mission Sync Active</p>
+                   <p className="text-xs font-black text-zinc-300 uppercase tracking-widest italic">Progress Saved</p>
                  </div>
                  <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest font-mono">Est. Completion: 96:00:00</p>
               </div>
@@ -383,7 +384,7 @@ const Dashboard = ({ roadmapState, clients, transactions, setActiveTab }: any) =
             className="relative group/btn h-20 px-12 bg-white text-black rounded-[24px] font-black uppercase tracking-[0.2em] text-xs hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(255,255,255,0.1)] shrink-0 overflow-hidden"
           >
             <span className="relative z-10 flex items-center gap-3">
-              Resume Protocol Day {roadmapState.findIndex((d: any) => d.tasks.some((t: any) => !t.completed)) + 1 || 7}
+              Continue Day {roadmapState.findIndex((d: any) => d.tasks.some((t: any) => !t.completed)) + 1 || 7}
               <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
             </span>
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/40 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
@@ -398,7 +399,7 @@ const Roadmap = ({ roadmapState, toggleTask }: { roadmapState: DayPlan[], toggle
   return (
     <div className="space-y-16">
       <SectionHeading 
-        title="7-Day Action Engine" 
+        title="7-Day Plan" 
         subtitle="A high-velocity operational plan designed for immediate market penetration. Execute every cycle."
         icon={Map}
       />
@@ -436,7 +437,7 @@ const Roadmap = ({ roadmapState, toggleTask }: { roadmapState: DayPlan[], toggle
                   
                   <div className="mt-10 space-y-3">
                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-600">
-                      <span>Sync Progress</span>
+                      <span>Save Progress</span>
                       <span className="font-mono">{Math.round(progress)}%</span>
                     </div>
                     <ProgressBar progress={progress} color="bg-white shadow-[0_0_12px_rgba(255,255,255,0.3)]" />
@@ -484,7 +485,7 @@ const Roadmap = ({ roadmapState, toggleTask }: { roadmapState: DayPlan[], toggle
                       <Target className="w-6 h-6 text-amber-500" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em] mb-2 italic font-mono">Expert Optimization Protocol</p>
+                      <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em] mb-2 italic font-mono">Pro Tip</p>
                       <p className="text-zinc-300 text-lg font-medium italic leading-relaxed">"{day.proTip}"</p>
                     </div>
                   </div>
@@ -506,7 +507,7 @@ const Week2Protocol = ({ week2State, toggleTask, clients }: { week2State: DayPla
     <div className="space-y-16 pb-24">
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
         <SectionHeading 
-          title="Week 2 Protocol" 
+          title="Week 2 Plan" 
           subtitle="No Client Yet? The Game Isn't Over. Week 2 is where it actually happens."
           icon={RefreshCw}
         />
@@ -580,7 +581,7 @@ const Week2Protocol = ({ week2State, toggleTask, clients }: { week2State: DayPla
                     
                     <div className="mt-10 space-y-3">
                       <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-600">
-                        <span>Sync Progress</span>
+                        <span>Save Progress</span>
                         <span className="font-mono">{Math.round(progress)}%</span>
                       </div>
                       <ProgressBar progress={progress} color="bg-white shadow-[0_0_12px_rgba(255,255,255,0.3)]" />
@@ -628,7 +629,7 @@ const Week2Protocol = ({ week2State, toggleTask, clients }: { week2State: DayPla
                         <Target className="w-6 h-6 text-emerald-500" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2 italic font-mono">Expert Optimization Protocol</p>
+                        <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2 italic font-mono">Pro Tip</p>
                         <p className="text-zinc-300 text-lg font-medium italic leading-relaxed">"{day.proTip}"</p>
                       </div>
                     </div>
@@ -948,7 +949,7 @@ const EarningsTracker = ({ transactions, addTransaction, updateTransaction, dele
   return (
     <div className="space-y-12">
       <SectionHeading 
-        title="Fiscal Intelligence" 
+        title="Earnings" 
         subtitle="Track your business revenue and operational costs with precision. Focus on the only metric that matters: net profit."
         icon={DollarSign}
       />
@@ -1149,7 +1150,7 @@ const ClientFind = () => {
                    <div className="mt-8 p-6 bg-zinc-950 border border-emerald-500/10 rounded-2xl relative overflow-hidden">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-3xl -z-10" />
                       <p className="text-xs font-black text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2">
-                         <Zap className="w-4 h-4 text-emerald-500" /> Optimization Protocols
+                         <Zap className="w-4 h-4 text-emerald-500" /> Tips
                       </p>
                       <ul className="text-sm text-zinc-500 space-y-4">
                         <li className="flex gap-3">
@@ -1176,35 +1177,99 @@ const ClientFind = () => {
   );
 };
 
-const RateCardManager = () => {
-  const PACKAGES = [
-    { name: 'Free Trial', price: '$0', desc: '1 Reel edit — sample work' },
-    { name: 'Starter', price: '$25', desc: '3 Reels' },
-    { name: 'Basic', price: '$75', desc: '8 Reels per month' },
-    { name: 'Standard', price: '$149', desc: '15 Reels + 1 Long-form per month' },
-  ];
+const RateCardManager = ({ profile, updateProfile }: { profile: UserProfile | null, updateProfile: (u: Partial<UserProfile>) => Promise<void> }) => {
+  const [localRateCard, setLocalRateCard] = useState<RatePackage[]>(profile?.intlRateCard || []);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (profile?.intlRateCard) {
+      setLocalRateCard(profile.intlRateCard);
+    }
+  }, [profile?.intlRateCard]);
+
+  if (!profile) return null;
+
+  const updateCard = (packageId: string, field: keyof RatePackage, value: string) => {
+    setLocalRateCard(prev => prev.map(p => p.id === packageId ? { ...p, [field]: value } : p));
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await updateProfile({ intlRateCard: localRateCard });
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 2000);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="space-y-16 pb-24">
-      <SectionHeading
-        title="Rate Card"
-        subtitle="Your standardized pricing. Share this with every prospect. Don't negotiate—dictate."
+      <SectionHeading 
+        title="Rate Card" 
+        subtitle="Standardized pricing architectures for your video editing services. Don't negotiate—dictate."
         icon={DollarSign}
       />
       <div className="max-w-3xl">
         <Card className="p-10 border-white/5 bg-zinc-950/50">
-          <h3 className="text-xl font-black text-white uppercase italic tracking-tighter flex items-center gap-3 mb-8">
-            <Globe2 className="w-5 h-5 text-emerald-500" />
-            Service Packages
-          </h3>
+          <div className="flex items-center justify-between mb-10">
+            <h3 className="text-xl font-black text-white uppercase italic tracking-tighter flex items-center gap-3">
+              <Globe2 className="w-5 h-5 text-emerald-500" />
+              Service Packages
+            </h3>
+            <div className="flex items-center gap-6">
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className={cn(
+                  "px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg flex items-center gap-2",
+                  isSaved ? "bg-emerald-500 text-black" : "bg-zinc-800 text-white hover:bg-emerald-500 hover:text-black"
+                )}
+              >
+                {isSaving ? <div className="w-3 h-3 rounded-full border-2 border-zinc-500 border-t-white animate-spin" /> : isSaved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+                {isSaving ? "Saving..." : isSaved ? "Saved!" : "Save Rate Card"}
+              </button>
+              <span className="text-[10px] font-black text-zinc-700 uppercase tracking-widest font-mono italic">Your Packages</span>
+            </div>
+          </div>
+          
           <div className="space-y-6">
-            {PACKAGES.map((pkg) => (
-              <div key={pkg.name} className="p-6 bg-zinc-900/50 rounded-2xl border border-white/5 flex justify-between items-center hover:border-emerald-500/20 transition-all">
-                <div>
-                  <p className="text-white font-black uppercase text-sm">{pkg.name}</p>
-                  <p className="text-zinc-500 text-xs mt-1">{pkg.desc}</p>
+            {localRateCard.map((pkg) => (
+              <div key={pkg.id} className="p-6 bg-zinc-900/50 rounded-2xl border border-white/5 space-y-4 group hover:border-emerald-500/20 transition-all">
+                <div className="flex justify-between items-start">
+                   <div className="flex-1 mr-4">
+                      <input 
+                        type="text"
+                        value={pkg.name}
+                        onChange={(e) => updateCard(pkg.id, 'name', e.target.value)}
+                        className="w-full bg-transparent text-white font-black uppercase text-sm focus:outline-none focus:text-emerald-400 p-1 rounded hover:bg-white/5"
+                      />
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-emerald-500 font-mono text-xs font-bold leading-none">$</span>
+                        <input 
+                          type="text"
+                          value={pkg.price}
+                          onChange={(e) => updateCard(pkg.id, 'price', e.target.value)}
+                          className="bg-transparent text-zinc-400 font-mono text-xs focus:outline-none focus:text-white p-1 rounded hover:bg-white/5 w-24"
+                        />
+                      </div>
+                   </div>
                 </div>
-                <span className="text-emerald-500 font-black text-xl">{pkg.price}</span>
+                
+                <div className="space-y-2">
+                   <p className="text-[9px] font-black text-zinc-700 uppercase tracking-widest italic">Deliverables_Manifest</p>
+                   <div className="flex flex-wrap gap-2">
+                      {pkg.deliverables.map((d, i) => (
+                        <span key={i} className="px-3 py-1 bg-black rounded-lg text-[9px] font-bold text-zinc-500 border border-white/5 uppercase tracking-tight italic">
+                          {d}
+                        </span>
+                      ))}
+                   </div>
+                </div>
               </div>
             ))}
           </div>
@@ -1224,7 +1289,7 @@ const ClosingTools = ({ profile }: { profile: UserProfile | null }) => {
   return (
     <div className="space-y-16 pb-24">
       <SectionHeading 
-        title="Closing Logic" 
+        title="Close Clients" 
         subtitle="Protocol overrides for common sales objections. Hard-pivot from rejection to retention."
         icon={Target}
       />
@@ -1275,11 +1340,11 @@ const ClosingTools = ({ profile }: { profile: UserProfile | null }) => {
                    <p><span className="text-zinc-600">CLIENT:</span> [Prospect Name]</p>
                    <p><span className="text-zinc-600">DELIVERABLES:</span> 15x Reels + 1 Long-form Edit</p>
                    <p><span className="text-zinc-600">TIMELINE:</span> First draft in 48 hours.</p>
-                   <p><span className="text-zinc-600">INVESTMENT:</span> $149 USD (50% Upfront)</p>
+                   <p><span className="text-zinc-600">INVESTMENT:</span> ${profile.intlRateCard?.[3]?.price || '149'} USD (50% Upfront)</p>
                    <p className="text-[10px] text-zinc-800 mt-10">--- GENERATED_BY_LAUNCHPAD_v1.0 ---</p>
                 </div>
                 <button 
-                  onClick={() => copyToClipboard(`PROJECT BATTLE-PLAN:\nCLIENT: [Name]\nDELIVERABLES: 15x Reels + 1 Long-form Edit\nTIMELINE: First draft in 48 hours.\nINVESTMENT: $149 USD\n\nNext steps: Confirm scope and I'll send the onboarding link.`)}
+                  onClick={() => copyToClipboard(`PROJECT BATTLE-PLAN:\nCLIENT: [Name]\nDELIVERABLES: 15x Reels + 1 Long-form Edit\nTIMELINE: First draft in 48 hours.\nINVESTMENT: $${profile.intlRateCard?.[3]?.price || '149'} USD\n\nNext steps: Confirm scope and I'll send the onboarding link.`)}
                   className="w-full py-4 bg-white text-black hover:bg-emerald-500 transition-all rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-black/40"
                 >
                   <Copy className="w-4 h-4" /> Copy Scope Template
@@ -1402,7 +1467,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
   return (
     <div className="space-y-16 pb-24">
       <SectionHeading 
-        title="Outreach Protocol" 
+        title="Send DMs" 
         subtitle="High-frequency communication sequences optimized for creator-market penetration. Dominate the inbox."
         icon={Send}
       />
@@ -1436,7 +1501,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
         <div className="md:col-span-2 space-y-10">
            <div className="flex items-center justify-between px-2">
               <h3 className="text-xl font-black text-white uppercase tracking-tighter italic flex items-center gap-4">
-                <Clock className="w-6 h-6 text-emerald-500" /> 3-Touch Persistence Sequence
+                <Clock className="w-6 h-6 text-emerald-500" /> 3-Day Follow-Up Sequence
               </h3>
               <div className="text-[9px] font-black text-zinc-600 uppercase tracking-[0.3em] font-mono italic">
                 Active_Automation_v{selectedNiche ? '2' : '0'}
@@ -1446,7 +1511,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
            {!selectedNiche ? (
               <Card className="p-20 flex flex-col items-center justify-center border-dashed border-white/5 opacity-50 bg-zinc-950/20">
                  <Lock className="w-8 h-8 text-zinc-800 mb-6" />
-                 <p className="text-sm font-black text-zinc-700 uppercase tracking-widest">Select target sector to unlock follow-up protocols</p>
+                 <p className="text-sm font-black text-zinc-700 uppercase tracking-widest">Select your niche to generate follow-up messages</p>
               </Card>
            ) : (
               <div className="space-y-8">
@@ -1482,7 +1547,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
                     )}
                   >
                     {isGeneratingFollowUps ? <div className="w-4 h-4 rounded-full border-[3px] border-emerald-950 border-t-white animate-spin" /> : <Zap className="w-4 h-4" />}
-                    {isGeneratingFollowUps ? "Synthesizing..." : "Generate Sequence"}
+                    {isGeneratingFollowUps ? "Generating..." : "Generate Follow-Ups"}
                   </button>
                 </div>
 
@@ -1516,7 +1581,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
              </h3>
              <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full ring-1 ring-white/10 text-[9px] font-black text-zinc-600 uppercase tracking-widest font-mono italic">
                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-               Realtime_Sync_Active
+               Auto-Saving
              </div>
           </div>
           
@@ -1656,7 +1721,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
                   )}
                 >
                   {isGeneratingDM ? <div className="w-5 h-5 rounded-full border-[3px] border-emerald-950 border-t-white animate-spin" /> : <Zap className="w-5 h-5" />}
-                  {isGeneratingDM ? "Synthesizing..." : "Generate Protocol"}
+                  {isGeneratingDM ? "Generating..." : "Generate DM"}
                 </button>
               </div>
             </div>
@@ -1683,7 +1748,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
                       onClick={() => copyToClipboard(generatedPersona)}
                       className="mt-8 flex items-center gap-3 text-[10px] font-black text-emerald-500/50 uppercase tracking-widest hover:text-emerald-500 transition-colors bg-black/40 px-5 py-2 rounded-xl ring-1 ring-emerald-500/20"
                     >
-                      <Plus className="w-4 h-4" /> Sync_To_Intelligence
+                      <Plus className="w-4 h-4" /> Add to Tracker
                     </button>
                   </div>
                 )}
@@ -1700,7 +1765,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
                       onClick={() => copyToClipboard(generatedDM)}
                       className="w-full flex items-center justify-center gap-3 h-14 bg-emerald-500 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-2xl shadow-emerald-500/20"
                     >
-                      <CheckCircle2 className="w-4 h-4" /> Copy_Protocol_Day_0
+                      <CheckCircle2 className="w-4 h-4" /> Copy DM
                     </button>
                   </div>
                 )}
@@ -1765,7 +1830,7 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
                           <span className="text-[8px] font-black text-blue-500 uppercase tracking-widest">Validated</span>
                        </div>
                     </div>
-                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-6 font-mono italic">Counter_Protocol_Alpha</p>
+                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-6 font-mono italic">Objection Reply</p>
                     <div className="text-zinc-300 text-[15px] leading-relaxed whitespace-pre-wrap font-medium italic">
                         "{generatedObjectionResponse}"
                     </div>
@@ -1893,7 +1958,7 @@ const Mindset = () => {
 
         <div className="space-y-10">
           <h3 className="text-sm font-black text-emerald-500 uppercase tracking-[0.2em] flex items-center gap-3">
-             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> Core Operating Protocols
+             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> Quick Tips
           </h3>
           <ul className="space-y-8">
             {[
@@ -2024,7 +2089,7 @@ const PortfolioManager = ({ profile, updateProfile }: { profile: UserProfile | n
 
             <div className="pt-8 border-t border-white/5 space-y-6">
               <div className="flex items-center justify-between">
-                <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest italic">Share_Protocol</p>
+                <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest italic">Share Portfolio</p>
                 <button 
                   className="px-6 py-2 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-all shadow-lg"
                   onClick={() => {
@@ -2139,7 +2204,7 @@ const ProjectTemplates = () => {
                       <div className="flex-1 hidden md:block h-px bg-zinc-800 relative overflow-hidden self-center mx-8">
                          <div className="absolute inset-y-[-2px] left-0 bg-white/20 w-1/3 rounded-full opacity-50 group-hover/track:bg-emerald-500 transition-all duration-700" style={{ left: `${i * 12 + 10}%`, width: `${25 + (i % 4) * 15}%` }}></div>
                       </div>
-                      <div className="text-[10px] font-mono text-zinc-800 font-bold hidden xl:block uppercase">Track_Synced</div>
+                      <div className="text-[10px] font-mono text-zinc-800 font-bold hidden xl:block uppercase">Saved</div>
                     </motion.div>
                   ))}
                 </div>
@@ -2178,7 +2243,7 @@ const CommandStrip = ({ activeTab, user }: { activeTab: string, user: any }) => 
       
       <div className="flex items-center gap-8">
         <div className="hidden sm:flex flex-col items-end">
-          <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-1 font-mono italic">Operator_ID</p>
+          <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-1 font-mono italic">Your Name</p>
           <p className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-tighter truncate max-w-[120px]">
             {user?.displayName || user?.email || 'GUEST'}
           </p>
@@ -2187,13 +2252,13 @@ const CommandStrip = ({ activeTab, user }: { activeTab: string, user: any }) => 
         <button 
           onClick={() => signOut(auth)}
           className="p-3 bg-zinc-900 border border-white/5 rounded-2xl hover:bg-zinc-800 hover:text-red-400 transition-all text-zinc-500 group"
-          title="Terminate Uplink"
+          title="Sign Out"
         >
           <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
         </button>
 
         <div className="flex flex-col items-end">
-          <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-1 font-mono italic">Clock_Cycles</p>
+          <p className="text-[9px] font-black text-zinc-600 uppercase tracking-widest leading-none mb-1 font-mono italic">Time</p>
           <p className="text-xs font-mono font-bold text-white uppercase tracking-tighter">
             {time.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </p>
@@ -2293,19 +2358,19 @@ export default function App() {
   }, [isWeek1Complete, roadmapLoading, activeTab, lastCompleteState]);
 
   const navItems = [
-    { id: 'dashboard', label: 'Command Center', icon: LayoutDashboard },
-    { id: 'roadmap', label: 'Action Engine', icon: Map },
-    ...(isWeek1Complete ? [{ id: 'week2', label: 'Week 2 Protocol', icon: RefreshCw }] : []),
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'roadmap', label: '7-Day Plan', icon: Map },
+    ...(isWeek1Complete ? [{ id: 'week2', label: 'Week 2 Plan', icon: RefreshCw }] : []),
     { id: 'portfolio', label: 'Portfolio Ops', icon: Briefcase },
     { id: 'pricing', label: 'Rate Cards', icon: DollarSign },
-    { id: 'outreach_hub', label: 'Outreach Protocol', icon: Send },
-    { id: 'closing', label: 'Closing Logic', icon: Target },
-    { id: 'clients', label: 'Lead Database', icon: Users },
-    { id: 'earnings', label: 'Fiscal Intell', icon: TrendingUp },
-    { id: 'templates', label: 'Timeline Arch', icon: Layers },
-    { id: 'dms', label: 'Script Library', icon: MessageSquare },
-    { id: 'resources', label: 'Asset Stack', icon: Briefcase },
-    { id: 'find', label: 'Market Search', icon: Search },
+    { id: 'outreach_hub', label: 'Send DMs', icon: Send },
+    { id: 'closing', label: 'Close Clients', icon: Target },
+    { id: 'clients', label: 'My Clients', icon: Users },
+    { id: 'earnings', label: 'Earnings', icon: TrendingUp },
+    { id: 'templates', label: 'Templates', icon: Layers },
+    { id: 'dms', label: 'DM Scripts', icon: MessageSquare },
+    { id: 'resources', label: 'Resources', icon: Briefcase },
+    { id: 'find', label: 'Find Clients', icon: Search },
     { id: 'mindset', label: 'Psychology', icon: Brain },
   ];
 
@@ -2321,7 +2386,7 @@ export default function App() {
       case 'roadmap': return <Roadmap roadmapState={roadmapState} toggleTask={toggleTask} />;
       case 'week2': return <Week2Protocol week2State={week2State} toggleTask={toggleWeek2Task} clients={clients} />;
       case 'portfolio': return <PortfolioManager profile={profile} updateProfile={updateProfile} />;
-      case 'pricing': return <RateCardManager />;
+      case 'pricing': return <RateCardManager profile={profile} updateProfile={updateProfile} />;
       case 'templates': return <ProjectTemplates />;
       case 'dms': return <DMLibrary profile={profile} />;
       case 'clients': return <ClientTracker clients={clients} addClient={addClient} updateClient={updateClientDoc} deleteClient={removeClient} />;
@@ -2449,7 +2514,7 @@ export default function App() {
                   </div>
                   <div>
                     <h4 className="font-black uppercase italic tracking-tighter text-2xl leading-none">Week 1 Complete</h4>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] mt-2 opacity-80">Week 2 Protocol Unlocked.</p>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] mt-2 opacity-80">Week 2 Plan Unlocked!</p>
                   </div>
                 </div>
                 <button 
