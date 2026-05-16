@@ -90,13 +90,14 @@ import {
   FollowUpStep,
   Objection
 } from './types';
-import { auth } from './lib/firebase';
+import { auth, db } from './lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { useFirestore, useRoadmap, useProfile, useWeek2Roadmap } from './lib/useFirestore';
 
 
-// --- License Keys (Valid Keys List) ---
+// --- License Keys ---
 const VALID_LICENSE_KEYS = [
   "DMP-55E2413E-3B27", "DMP-DF0B8505-DF71", "DMP-D971EA4E-0447",
   "DMP-72B94FA0-E221", "DMP-B7AEDC95-684A", "DMP-5180B3B7-D2A6",
@@ -123,26 +124,52 @@ const LicenseGate = ({ onUnlock }: { onUnlock: () => void }) => {
   const [error, setError] = useState('');
   const [checking, setChecking] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setChecking(true);
     setError('');
-    setTimeout(() => {
+    try {
       const trimmed = key.trim().toUpperCase();
-      if (VALID_LICENSE_KEYS.includes(trimmed)) {
-        localStorage.setItem('dm_license_key', trimmed);
-        onUnlock();
-      } else {
+
+      // Step 1: Check valid key list
+      if (!VALID_LICENSE_KEYS.includes(trimmed)) {
         setError('Invalid license key. Purchase access at the link below.');
+        setChecking(false);
+        return;
       }
+
+      // Step 2: Check Firebase if already used
+      const keyRef = doc(db, 'licenseKeys', trimmed);
+      const keySnap = await getDoc(keyRef);
+
+      if (keySnap.exists() && keySnap.data().used) {
+        setError('This key is already activated on another device. Contact support.');
+        setChecking(false);
+        return;
+      }
+
+      // Step 3: Mark as used in Firebase
+      await setDoc(keyRef, {
+        used: true,
+        activatedAt: new Date().toISOString(),
+        deviceInfo: navigator.userAgent.slice(0, 100)
+      });
+
+      // Step 4: Unlock
+      localStorage.setItem('dm_license_key', trimmed);
+      onUnlock();
+
+    } catch (e) {
+      console.error(e);
+      setError('Connection error. Please try again.');
+    } finally {
       setChecking(false);
-    }, 800);
+    }
   };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-6 bg-[radial-gradient(circle_at_50%_0%,_rgba(16,185,129,0.1),_transparent_70%)]">
       <div className="max-w-md w-full space-y-10 text-center relative">
         <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-emerald-500/10 blur-[100px] pointer-events-none" />
-        
         <div className="space-y-4">
           <div className="inline-flex p-4 bg-zinc-900 ring-1 ring-white/10 rounded-3xl mb-4">
             <Lock className="w-10 h-10 text-emerald-400" />
@@ -154,7 +181,6 @@ const LicenseGate = ({ onUnlock }: { onUnlock: () => void }) => {
             Enter your license key to access the system.
           </p>
         </div>
-
         <div className="space-y-4">
           <input
             type="text"
@@ -164,11 +190,7 @@ const LicenseGate = ({ onUnlock }: { onUnlock: () => void }) => {
             placeholder="DMP-XXXXXXXX-XXXX"
             className="w-full h-16 bg-zinc-900 border border-white/10 rounded-2xl px-6 text-white font-mono text-center text-lg tracking-widest focus:outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-700"
           />
-          
-          {error && (
-            <p className="text-red-400 text-sm font-semibold">{error}</p>
-          )}
-
+          {error && <p className="text-red-400 text-sm font-semibold">{error}</p>}
           <button
             onClick={handleSubmit}
             disabled={checking || !key.trim()}
@@ -180,7 +202,6 @@ const LicenseGate = ({ onUnlock }: { onUnlock: () => void }) => {
               <><Zap className="w-5 h-5" /> Unlock Access</>
             )}
           </button>
-
           <p className="text-zinc-700 text-xs">
             No key?{' '}
             <a href="https://client-forgex.vercel.app" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline">
