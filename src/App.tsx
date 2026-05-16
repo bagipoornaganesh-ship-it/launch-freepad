@@ -2417,22 +2417,44 @@ export default function App() {
     initialLoadRef.current = false;
   }, [isWeek1Complete, roadmapLoading, activeTab, lastCompleteState]);
 
-  const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'roadmap', label: '7-Day Plan', icon: Map },
-    ...(isWeek1Complete ? [{ id: 'week2', label: 'Week 2 Plan', icon: RefreshCw }] : []),
-    { id: 'portfolio', label: 'Portfolio Ops', icon: Briefcase },
-    { id: 'pricing', label: 'Rate Cards', icon: DollarSign },
-    { id: 'outreach_hub', label: 'Send DMs', icon: Send },
-    { id: 'closing', label: 'Close Clients', icon: Target },
-    { id: 'clients', label: 'My Clients', icon: Users },
-    { id: 'earnings', label: 'Earnings', icon: TrendingUp },
-    { id: 'templates', label: 'Templates', icon: Layers },
-    { id: 'dms', label: 'DM Scripts', icon: MessageSquare },
-    { id: 'resources', label: 'Resources', icon: Briefcase },
-    { id: 'find', label: 'Find Clients', icon: Search },
-    { id: 'mindset', label: 'Psychology', icon: Brain },
+  const navGroups = [
+    {
+      label: 'Getting Started',
+      items: [
+        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { id: 'roadmap', label: '7-Day Plan', icon: Map },
+        ...(isWeek1Complete ? [{ id: 'week2', label: 'Week 2 Plan', icon: RefreshCw }] : []),
+      ]
+    },
+    {
+      label: 'Outreach',
+      items: [
+        { id: 'outreach_hub', label: 'Send DMs', icon: Send },
+        { id: 'dms', label: 'DM Scripts', icon: MessageSquare },
+        { id: 'find', label: 'Find Clients', icon: Search },
+        { id: 'clients', label: 'My Clients', icon: Users },
+      ]
+    },
+    {
+      label: 'Business',
+      items: [
+        { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
+        { id: 'pricing', label: 'Rate Cards', icon: DollarSign },
+        { id: 'closing', label: 'Close Clients', icon: Target },
+        { id: 'earnings', label: 'Earnings', icon: TrendingUp },
+      ]
+    },
+    {
+      label: 'Toolkit',
+      items: [
+        { id: 'templates', label: 'Templates', icon: Layers },
+        { id: 'resources', label: 'Resources', icon: Briefcase },
+        { id: 'mindset', label: 'Mindset', icon: Brain },
+      ]
+    },
   ];
+
+  const navItems = navGroups.flatMap(g => g.items);
 
   const renderContent = () => {
     if (roadmapLoading || profileLoading) return (
@@ -2499,9 +2521,11 @@ export default function App() {
             </div>
           </div>
 
-          <nav className="flex-1 space-y-1">
-            <p className="px-5 text-[9px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-6 italic leading-none">System_Modules</p>
-            {navItems.map((item) => (
+          <nav className="flex-1 space-y-4 overflow-y-auto">
+            {navGroups.map((group) => (
+              <div key={group.label}>
+                <p className="px-5 text-[9px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-2 italic leading-none">{group.label}</p>
+                {group.items.map((item) => (
               <button
                 key={item.id}
                 onClick={() => {
@@ -2528,6 +2552,8 @@ export default function App() {
                 )} />
                 {item.label}
               </button>
+                ))}
+              </div>
             ))}
           </nav>
 
