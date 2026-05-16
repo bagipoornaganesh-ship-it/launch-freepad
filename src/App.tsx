@@ -95,6 +95,104 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { useFirestore, useRoadmap, useProfile, useWeek2Roadmap } from './lib/useFirestore';
 
+
+// --- License Keys (Valid Keys List) ---
+const VALID_LICENSE_KEYS = [
+  "DMP-55E2413E-3B27", "DMP-DF0B8505-DF71", "DMP-D971EA4E-0447",
+  "DMP-72B94FA0-E221", "DMP-B7AEDC95-684A", "DMP-5180B3B7-D2A6",
+  "DMP-456E7DA5-378D", "DMP-1FA965EE-8C6E", "DMP-CFF04F42-C86D",
+  "DMP-B18B8F44-EC85", "DMP-D6E787A6-383C", "DMP-9BE95289-95EC",
+  "DMP-CB34907A-5263", "DMP-E0728BC8-A9BC", "DMP-DB8117AF-205D",
+  "DMP-21278DE2-EACF", "DMP-CCFB0343-CBBD", "DMP-D9D4C4BD-6148",
+  "DMP-8F9B54FB-3417", "DMP-30E6B4DE-1251", "DMP-8F3ABBE6-00A5",
+  "DMP-CA1A796B-8F3E", "DMP-FADF88A5-54E3", "DMP-13DCF8DC-14D7",
+  "DMP-77911D12-E0AD", "DMP-7BB94B39-337F", "DMP-9A9E0D88-B358",
+  "DMP-7C37785D-391E", "DMP-28DFD7EE-8365", "DMP-56BAFC18-EF82",
+  "DMP-07D171E1-CAB8", "DMP-79720DC4-4424", "DMP-52F17B6F-4213",
+  "DMP-3ACC3A71-C5D5", "DMP-3F405711-7A99", "DMP-F0664F40-18C4",
+  "DMP-B251F535-B3C5", "DMP-7CDA5775-22CE", "DMP-FA72CF4E-1046",
+  "DMP-B6E27C16-FCE0", "DMP-192764EB-FABA", "DMP-2BFACB52-CF98",
+  "DMP-7608B4F5-4C61", "DMP-4DA5594A-CE9F", "DMP-B417E160-B7CF",
+  "DMP-5CD48A43-4544", "DMP-8D4F958A-D069", "DMP-880E948D-40E0",
+  "DMP-FB381547-7FE2", "DMP-D1AB9D6C-8EAD"
+];
+
+// --- License Gate Component ---
+const LicenseGate = ({ onUnlock }: { onUnlock: () => void }) => {
+  const [key, setKey] = useState('');
+  const [error, setError] = useState('');
+  const [checking, setChecking] = useState(false);
+
+  const handleSubmit = () => {
+    setChecking(true);
+    setError('');
+    setTimeout(() => {
+      const trimmed = key.trim().toUpperCase();
+      if (VALID_LICENSE_KEYS.includes(trimmed)) {
+        localStorage.setItem('dm_license_key', trimmed);
+        onUnlock();
+      } else {
+        setError('Invalid license key. Purchase access at the link below.');
+      }
+      setChecking(false);
+    }, 800);
+  };
+
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center p-6 bg-[radial-gradient(circle_at_50%_0%,_rgba(16,185,129,0.1),_transparent_70%)]">
+      <div className="max-w-md w-full space-y-10 text-center relative">
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-48 h-48 bg-emerald-500/10 blur-[100px] pointer-events-none" />
+        
+        <div className="space-y-4">
+          <div className="inline-flex p-4 bg-zinc-900 ring-1 ring-white/10 rounded-3xl mb-4">
+            <Lock className="w-10 h-10 text-emerald-400" />
+          </div>
+          <h1 className="text-5xl font-black text-white italic tracking-tight uppercase leading-none">
+            DM<span className="text-emerald-500">.</span>PROTOCOL
+          </h1>
+          <p className="text-zinc-500 text-base font-medium">
+            Enter your license key to access the system.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <input
+            type="text"
+            value={key}
+            onChange={(e) => setKey(e.target.value.toUpperCase())}
+            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+            placeholder="DMP-XXXXXXXX-XXXX"
+            className="w-full h-16 bg-zinc-900 border border-white/10 rounded-2xl px-6 text-white font-mono text-center text-lg tracking-widest focus:outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-700"
+          />
+          
+          {error && (
+            <p className="text-red-400 text-sm font-semibold">{error}</p>
+          )}
+
+          <button
+            onClick={handleSubmit}
+            disabled={checking || !key.trim()}
+            className="w-full h-16 bg-emerald-500 text-black rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-emerald-400 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+          >
+            {checking ? (
+              <div className="w-5 h-5 rounded-full border-2 border-black/30 border-t-black animate-spin" />
+            ) : (
+              <><Zap className="w-5 h-5" /> Unlock Access</>
+            )}
+          </button>
+
+          <p className="text-zinc-700 text-xs">
+            No key?{' '}
+            <a href="https://client-forgex.vercel.app" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:underline">
+              Purchase here →
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // --- Auth Component ---
 
 const Login = () => {
@@ -2277,6 +2375,10 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [user, authLoading] = useAuthState(auth);
+  const [isLicensed, setIsLicensed] = useState(() => {
+    const saved = localStorage.getItem('dm_license_key');
+    return saved ? VALID_LICENSE_KEYS.includes(saved) : false;
+  });
   
   // Persistence
   const { data: clients, add: addClient, update: updateClientDoc, remove: removeClient } = useFirestore<Client>('clients');
@@ -2399,6 +2501,8 @@ export default function App() {
       default: return <Dashboard roadmapState={roadmapState} clients={clients} transactions={transactions} />;
     }
   };
+
+  if (!isLicensed) return <LicenseGate onUnlock={() => setIsLicensed(true)} />;
 
   if (authLoading) return (
     <div className="min-h-screen bg-black flex items-center justify-center">
