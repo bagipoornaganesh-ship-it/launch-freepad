@@ -1642,9 +1642,9 @@ const OutreachHub = ({ clients, profile, updateProfile }: { clients: Client[], p
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <Card className="lg:col-span-2 p-10 h-[380px]">
-               <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-10 italic font-mono">Archive_Distribution</p>
-               <div className="h-full w-full pb-10">
+            <Card className="lg:col-span-2 p-10">
+               <p className="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-6 italic font-mono">Archive_Distribution</p>
+               <div style={{ width: '100%', height: 280 }}>
                  <ResponsiveContainer width="100%" height="100%">
                    <BarChart data={[
                      { name: 'COLD', value: clients.filter(c => c.status === 'Cold').length, color: '#18181b' },
